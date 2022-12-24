@@ -19,11 +19,6 @@ contract EscrowFundManagementToken is ERC20, ERC20Burnable, Ownable {
         payable(msg.sender).transfer(amt);
     }
 
-    // function withdrawalFrom(address payable to, uint256 amt) public payable {
-    //     _burn(to,amt);
-    //     to.transfer(amt);
-    // }
-
     function contractBalance()public view returns(uint256){
         return address(this).balance;
     }
