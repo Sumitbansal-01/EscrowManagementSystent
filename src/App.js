@@ -1,24 +1,51 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { Header } from './component/Header'
+import { Footer } from './component/Footer';
+import { LoginPage } from './component/LoginPage';
 import './App.css';
+import Web3Modal from "web3modal"
+import { ethers, Contract } from "ethers"
+const { abi } = require("./contracts/EscrowFundManagement.json")
+// import { LoginPage } from './component/LoginPage';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
+
+  const [contract, setContract] = useState({})
+  const [contractAddress, setContractAddress] = useState('sumit')
+  const initWeb3 = async () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const web3Modal = new Web3Modal({
+          cacheProvider: true
+        })
+        const instance = await web3Modal.connect();
+        const provider = new ethers.providers.Web3Provider(instance);
+        const { chainId } = await provider.getNetwork()
+        const signer = provider.getSigner();
+        const contract = new Contract('0x65973fd42A2b4DFC7AaBe7Fef875d9f9a660f771', abi, signer)
+        resolve({ contract, signer, chainId })
+      } catch (err) {
+        reject(err)
+      }
+    })
+
+  }
+  useEffect(() => {
+    initWeb3()
+      .then(async ({ contract }) => {
+        setContract(contract)
+        console.log({ contract })
+        // setContractAddress(await contract.tokenContractAddress())
+      })
+  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <LoginPage/>
+      <Footer />
+    </>
   );
 }
 
