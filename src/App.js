@@ -3,6 +3,7 @@ import { Header } from './component/Header'
 import { Footer } from './component/Footer';
 import { LoginPage } from './component/LoginPage';
 import { ContractList } from './component/ContractList';
+import { EscrowContract } from './component/Contract'
 import './App.css';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal"
@@ -46,16 +47,19 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Header />
-        <Switch >
-          <div style={{ minHeight: '82vh' }}>
+        <div style={{ minHeight: '82vh' }}>
+          <Switch >
             <Route exact path="/">
               <LoginPage />
             </Route>
             <Route exact path="/contractlist">
               <ContractList />
             </Route>
-          </div>
-        </Switch>
+            <Route exact path="/contract">
+              <EscrowContract />
+            </Route>
+          </Switch>
+        </div>
         <Footer />
       </BrowserRouter>
     </div>
