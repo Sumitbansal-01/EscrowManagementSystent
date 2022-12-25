@@ -43,18 +43,22 @@ function App() {
       })
   }, [])
   return (
-    <BrowserRouter>
-      <Header />
-      <Switch>
-        <Route exact path="/">
-          <LoginPage />
-        </Route>
-        <Route exact path="/contractlist">
-          <ContractList/>
-        </Route>
-      </Switch>
-      <Footer />
-    </BrowserRouter>
+    <div className="App">
+      <BrowserRouter>
+        <Header />
+        <Switch >
+          <div style={{ minHeight: '82vh' }}>
+            <Route exact path="/">
+              <LoginPage />
+            </Route>
+            <Route exact path="/contractlist">
+              <ContractList />
+            </Route>
+          </div>
+        </Switch>
+        <Footer />
+      </BrowserRouter>
+    </div>
   );
 }
 

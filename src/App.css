@@ -1,7 +1,10 @@
 .App {
   text-align: center;
+  /* min-height: "180px" */
 }
-
+.input{
+  background-color:white
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

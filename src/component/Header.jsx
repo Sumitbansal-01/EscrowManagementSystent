@@ -25,8 +25,8 @@ export const Header = () => {
             navbarScroll
           >
           </Nav>
-          {showWithdrawl?<Withdrawl show={showWithdrawl} handleClose={(e)=>{e.preventDefault(); setShowWithdrawl(false)}}/>:null}
-          {showDeposit?<Deposit show={showDeposit} handleClose={(e)=>{e.preventDefault(); setShowDeposit(false)}}/>:null}
+          {showWithdrawl?<Withdrawl show={showWithdrawl} handleClose={()=>{setShowWithdrawl(false)}}/>:null}
+          {showDeposit?<Deposit show={showDeposit} handleClose={()=>{setShowDeposit(false)}}/>:null}
           <Form className="d-flex col-4">
             <NavDropdown title={<MdGeneratingTokens style={{color:'white', fontSize:'4vh'}}/>} id="navbarScrollingDropdown" >
               <NavDropdown.Item onClick={(e)=>{e.preventDefault(); setShowDeposit(true)}}>Add Token</NavDropdown.Item>
