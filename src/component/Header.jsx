@@ -4,12 +4,17 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { MdGeneratingTokens } from "react-icons/md";
+import { Withdrawl } from './Withdrawl';
+import { useState } from 'react';
+import { Deposit } from './Deposit';
 
 
 export const Header = () => {
+
+  const [showWithdrawl,setShowWithdrawl]=useState(false)
+  const [showDeposit,setShowDeposit]=useState(false)
   return (
     <Navbar bg="dark" variant='dark' expand="lg">
-
       <Container fluid >
         <Navbar.Brand href="#">Escrow Management System</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -19,12 +24,13 @@ export const Header = () => {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-
           </Nav>
+          {showWithdrawl?<Withdrawl show={showWithdrawl} handleClose={(e)=>{e.preventDefault(); setShowWithdrawl(false)}}/>:null}
+          {showDeposit?<Deposit show={showDeposit} handleClose={(e)=>{e.preventDefault(); setShowDeposit(false)}}/>:null}
           <Form className="d-flex col-4">
             <NavDropdown title={<MdGeneratingTokens style={{color:'white', fontSize:'4vh'}}/>} id="navbarScrollingDropdown" >
-              <NavDropdown.Item href="#action3">Add Token</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
+              <NavDropdown.Item onClick={(e)=>{e.preventDefault(); setShowDeposit(true)}}>Add Token</NavDropdown.Item>
+              <NavDropdown.Item onClick={e=>{e.preventDefault(); setShowWithdrawl(true)}}>
                 WidthDraw Token
               </NavDropdown.Item>
             </NavDropdown>

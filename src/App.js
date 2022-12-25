@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Header } from './component/Header'
 import { Footer } from './component/Footer';
 import { LoginPage } from './component/LoginPage';
+import { ContractList } from './component/ContractList';
 import './App.css';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal"
 import { ethers, Contract } from "ethers"
 const { abi } = require("./contracts/EscrowFundManagement.json")
@@ -13,7 +15,7 @@ const { abi } = require("./contracts/EscrowFundManagement.json")
 function App() {
 
   const [contract, setContract] = useState({})
-  const [contractAddress, setContractAddress] = useState('sumit')
+  // const [contractAddress, setContractAddress] = useState('sumit')
   const initWeb3 = async () => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -41,11 +43,18 @@ function App() {
       })
   }, [])
   return (
-    <>
+    <BrowserRouter>
       <Header />
-      <LoginPage/>
+      <Switch>
+        <Route exact path="/">
+          <LoginPage />
+        </Route>
+        <Route exact path="/contractlist">
+          <ContractList/>
+        </Route>
+      </Switch>
       <Footer />
-    </>
+    </BrowserRouter>
   );
 }
 
