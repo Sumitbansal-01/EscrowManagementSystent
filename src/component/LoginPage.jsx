@@ -20,7 +20,7 @@ export const LoginPage = (props) => {
           <Button variant="primary" type="submit" style={{width:'80%', margin:'1%'}} onClick={async e=>{
             e.preventDefault()
             const result=await props?.connect()
-            console.log({result})
+            // console.log({result})
             localStorage.setItem('tokenContractAddress',await result.contract.tokenContractAddress())
             props.setTokenContractAddress(await result.contract.tokenContractAddress())
             // localStorage.setItem('tokenContract',JSON.stringify(new Contract(await result.contract.tokenContractAddress(),abi,result.signer)))

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Header } from './component/Header'
 import { Footer } from './component/Footer';
 import { LoginPage } from './component/LoginPage';
@@ -20,6 +20,7 @@ function App() {
   const [address, setAddress] = useState('')
   const [tokenContractAddress,setTokenContractAddress]=useState('')
   const [tokenContract,setTokenContract]=useState({})
+  const [signer,setSigner]=useState({})
   const initWeb3 = async () => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -32,9 +33,10 @@ function App() {
         localStorage.setItem('address',address)
         // localStorage.setItem('tokenContractAddress',tokenContractAddress)
         setAddress(address)
-        console.log({signer})
+        // console.log({signer})
         const contract=new Contract('0x678194d5EBe9ff3B60474cA84E7Bef5bBf5F5F4b', abi, signer)
         setContract(contract)
+        setSigner(signer)
         resolve({ signer, chainId , address, contract})
       } catch (err) {
         reject(err)
@@ -63,10 +65,10 @@ function App() {
               <LoginPage connect={initWeb3} setTokenContract={setTokenContract} setTokenContractAddress={setTokenContractAddress}/>
             </Route>
             <Route exact path="/contractlist">
-              <ContractList contract={contract}/>
+              <ContractList contract={contract} signer={signer}/>
             </Route>
             <Route exact path="/contract">
-              <EscrowContract />
+              <EscrowContract signer={signer} tokenContract={tokenContract}/>
             </Route>
           </Switch>
         </div>

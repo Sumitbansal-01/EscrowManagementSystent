@@ -31,7 +31,21 @@ export const GenerateContract = (props) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={props?.handleClose}>
+                <Button variant="primary" onClick={async e=>{
+                    try{
+                    e.preventDefault()
+                    const tx=await props.contract.generateContract(buyeraddress, sellerAddress, `${Number(contractAmount)}`)
+                    console.log({tx})
+                    await tx.wait()
+                    console.log('after wait')
+                    setContractAmount('')
+                    setBuyerAddress('')
+                    setSellerAddress('')
+                    props.setCallUseEffect(e=>!e)
+                    }catch(err){
+                        console.error(err)
+                    }
+                }}>
                     Generate
                 </Button>
             </Modal.Footer>

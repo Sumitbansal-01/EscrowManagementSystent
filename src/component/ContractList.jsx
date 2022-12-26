@@ -7,20 +7,20 @@ import { useHistory } from 'react-router-dom'
 export const ContractList = (props) => {
     const [showGenerateContract, setShowGenerateContract] = useState(false)
     const [search, setSearch] = useState('')
-    const [addresses,setAddresses]=useState([])
+    const [addresses, setAddresses] = useState([])
+    const [callUseEffect, setCallUseEffect] = useState(false)
     const history = useHistory()
-    useEffect(()=>{
-        if (!props?.contract.address){
+    useEffect(() => {
+        if (!props?.contract.address) {
             history.push('/')
-        }else{
-            props?.contract.getContracts(localStorage.getItem('address'))
-            .then(e=>{
+        }
+        props?.contract.getContracts(localStorage.getItem('address'))
+            .then(e => {
                 setAddresses(e)
                 // console.log({e})
             })
-            .catch(e=>console.error(e))
-        }
-    },[history, props])
+            .catch(e => console.error(e))
+    }, [history, props, callUseEffect])
     return (
         <div >
             <Form className="d-flex container mt-5 mb-3">
@@ -42,7 +42,7 @@ export const ContractList = (props) => {
                     // }))
                 }}>Search</Button>
             </Form>
-            {showGenerateContract ? <GenerateContract show={showGenerateContract} handleClose={() => { setShowGenerateContract(false) }} /> : null}
+            {showGenerateContract ? <GenerateContract show={showGenerateContract} handleClose={() => { setShowGenerateContract(false) }} setCallUseEffect={setCallUseEffect} contract={props?.contract} /> : null}
             <div className='container' style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button variant='outline-primary' style={{ margin: '1%' }} onClick={e => {
                     e.preventDefault()
@@ -51,7 +51,7 @@ export const ContractList = (props) => {
             </div>
             <div className='container'>
                 <Accordion >
-                    {addresses?.map((n, i) => <PerAccordion Address={n} index={i} />)}
+                    {addresses?.map((n, i) => <PerAccordion Address={n} index={i} signer={props?.signer} />)}
                 </Accordion>
             </div>
         </div >
