@@ -41,6 +41,10 @@ contract EscrowFundManagement {
         tokenContractAddress=address(tokenContract);
     }
 
+    function getContracts(address from) public view returns(address [] memory ){
+        return addressesCollection[from];
+    }
+    
     function OwnerTransfer(address to) onlyEFMOwner external {
         Owner=to;
     }
@@ -67,7 +71,7 @@ contract escrow {
     EscrowFundManagementToken tokenContract;
     address public tokenContractAddress;
     uint256 public contractAmount;
-    mapping(address => uint) TotalAmount;
+    // mapping(address => uint) TotalAmount;
     address public Owner;
   
     // Defining a enumerator 'State'

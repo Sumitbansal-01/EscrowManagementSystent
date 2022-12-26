@@ -20,7 +20,16 @@ export const Withdrawl = (props) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={props?.handleClose}>
+                <Button variant="primary" onClick={async e=>{
+                    e.preventDefault()
+                    const tx=await props.tokenContract.withdrawal(`${Number(amount)*(10**18)}`)
+                    console.log({tx})
+                    await tx.wait()
+                    // console.log('after wait')
+                    setAmount(0)
+                    props.setCallUseEffect(e=>!e)
+                    // console.log('withdrawl complete')
+                }}>
                     Withdrawl
                 </Button>
             </Modal.Footer>

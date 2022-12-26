@@ -1,11 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Accordion, Form } from 'react-bootstrap'
 import { PerAccordion } from './PerAccordion'
 import { GenerateContract } from './GenerateContract'
+import { useHistory } from 'react-router-dom'
 
-export const ContractList = () => {
+export const ContractList = (props) => {
     const [showGenerateContract, setShowGenerateContract] = useState(false)
     const [search, setSearch] = useState('')
+    const [addresses,setAddresses]=useState([])
+    const history = useHistory()
+    useEffect(()=>{
+        if (!props?.contract.address){
+            history.push('/')
+        }else{
+            props?.contract.getContracts(localStorage.getItem('address'))
+            .then(e=>{
+                setAddresses(e)
+                // console.log({e})
+            })
+            .catch(e=>console.error(e))
+        }
+    },[history, props])
     return (
         <div >
             <Form className="d-flex container mt-5 mb-3">
@@ -36,7 +51,7 @@ export const ContractList = () => {
             </div>
             <div className='container'>
                 <Accordion >
-                    {[1, 2, 3, 4]?.map((n, i) => <PerAccordion Address={n} index={i} />)}
+                    {addresses?.map((n, i) => <PerAccordion Address={n} index={i} />)}
                 </Accordion>
             </div>
         </div >

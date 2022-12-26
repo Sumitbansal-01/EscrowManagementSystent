@@ -20,7 +20,15 @@ export const Deposit = (props) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={props?.handleClose}>
+                <Button variant="primary" onClick={async e=>{
+                    e.preventDefault()
+                    const tx=await props.tokenContract.deposit(localStorage.getItem('address'),`${Number(amount)*(10**18)}`,{value:`${Number(amount)*(10**18)}`})
+                    console.log({tx})
+                    await tx.wait()
+                    console.log('after wait')
+                    setAmount(0)
+                    props.setCallUseEffect(e=>!e)
+                }}>
                     Add
                 </Button>
             </Modal.Footer>
