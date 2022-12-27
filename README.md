@@ -1,4 +1,29 @@
-# Getting Started with Create React App
+### This is EscrowFundManagement created by Sumit Bansal
+
+In this project people can create their escrow account. The payment method which will use are ERC20 token name "EFMT". All the history of the contract is saved in a main contract so people can create multiple contract and can manage them at the same time. In this project their are 3 contract
+
+###  EscrowFundManagement
+This is the main contract which initiliaze the token contract and escrow contract. This contract store all the previous escrow contract in which the user is participate
+
+### EscrowFundManagementToken
+This is an ERC20 token contract and this contract initialize by the main contract. This token of this is of 18 decimals and the symbol is EFMT. This contract work on mint burn phenomena.This contract is payable for minting user have to pay ethers or value to the contract which are equal to the number of token that will mint. If anyone want to burn the contract then they should called "withdrawal" method to burn the token and get the equal amount of ethers
+
+### escrow
+As the name suggest this is an escrow which user created with the help of main contract
+
+This project is on Truffle and React
+
+## Starting truffle
+
+User mush have truffle instal in their system
+### truffle init
+### truffle migrate
+Befor doing the migration user has to configure the network in truffle config
+
+User has to mention the contract address in App.js file in initWeb3 function
+
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

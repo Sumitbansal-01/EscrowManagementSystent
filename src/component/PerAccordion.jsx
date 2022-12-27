@@ -37,7 +37,7 @@ export const PerAccordion = (props) => {
         callFn()
     }, [props])
     return (
-        <Accordion.Item eventKey={props.index} key='{props.Address}'>
+        <Accordion.Item eventKey={props?.index} key={props?.Address}>
             <Accordion.Header>{props?.Address}</Accordion.Header>
             <Accordion.Body style={{ border: '1px solid grey', borderTop: 'none' }}>
                 <div className='mt-2 mb-3' style={{ display: 'flex', justifyContent: 'flex-end' }}>
