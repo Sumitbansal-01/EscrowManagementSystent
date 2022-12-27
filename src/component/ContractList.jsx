@@ -7,19 +7,21 @@ import { useHistory } from 'react-router-dom'
 export const ContractList = (props) => {
     const [showGenerateContract, setShowGenerateContract] = useState(false)
     const [search, setSearch] = useState('')
+    const [searchAddress, setSearchAddress] = useState([])
     const [addresses, setAddresses] = useState([])
     const [callUseEffect, setCallUseEffect] = useState(false)
     const history = useHistory()
     useEffect(() => {
         if (!props?.contract.address) {
             history.push('/')
+        } else {
+            props?.contract.getContracts(localStorage.getItem('address'))
+                .then(e => {
+                    setAddresses([...e].reverse())
+                })
+                .catch(e => console.error(e))
         }
-        props?.contract.getContracts(localStorage.getItem('address'))
-            .then(e => {
-                setAddresses(e)
-                // console.log({e})
-            })
-            .catch(e => console.error(e))
+
     }, [history, props, callUseEffect])
     return (
         <div >
@@ -33,13 +35,13 @@ export const ContractList = (props) => {
                 />
                 <Button variant="outline-primary" onClick={e => {
                     e.preventDefault()
-                    // setSearchColor(color.filter(n => {
-                    //     if (n.includes(search.trim())) {
-                    //         return true
-                    //     } else {
-                    //         return false
-                    //     }
-                    // }))
+                    setSearchAddress(addresses.filter(n => {
+                        if (n.includes(search.trim())) {
+                            return true
+                        } else {
+                            return false
+                        }
+                    }))
                 }}>Search</Button>
             </Form>
             {showGenerateContract ? <GenerateContract show={showGenerateContract} handleClose={() => { setShowGenerateContract(false) }} setCallUseEffect={setCallUseEffect} contract={props?.contract} /> : null}
@@ -50,8 +52,9 @@ export const ContractList = (props) => {
                 }}>Generate Contract</Button>
             </div>
             <div className='container'>
+                {search !== '' && searchAddress.length === 0 ? <span>No Result Found</span> : null}
                 <Accordion >
-                    {addresses?.map((n, i) => <PerAccordion Address={n} index={i} signer={props?.signer} />)}
+                    {(search === '' ? addresses : searchAddress)?.map((n, i) => <PerAccordion Address={n} index={i} signer={props?.signer} />)}
                 </Accordion>
             </div>
         </div >

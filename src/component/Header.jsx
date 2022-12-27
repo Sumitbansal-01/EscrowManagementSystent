@@ -7,28 +7,12 @@ import { MdGeneratingTokens } from "react-icons/md";
 import { Withdrawl } from './Withdrawl';
 import {  useState } from 'react';
 import { Deposit } from './Deposit';
-// import { useHistory } from 'react-router-dom';
 
 
 export const Header = (props) => {
-  // const history=useHistory()
   const [showWithdrawl, setShowWithdrawl] = useState(false)
   const [showDeposit, setShowDeposit] = useState(false)
-  // const [balance,setBalance]=useState(Number(localStorage.getItem('accountTokenBalance'))/10**18)
-  // const [callUseEffect, setCallUseEffect]=useState(false)
-  // useEffect(()=>{
-  //   console.log('in useeffect')
-  //   if (!props?.tokenContract.address){
-  //     history.push('/')
-  //   }else{
-  //     props?.tokenContract?.balanceOf(localStorage.getItem('address'))
-  //     .then(e=>{
-  //       console.log(e.toString())
-  //       setBalance(Number(e.toString())/10**18)
-  //       localStorage.setItem('accountTokenBalance', e.toString())
-  //     }).catch(e=>console.error(e))
-  //   }
-  // },[props, history, callUseEffect])
+  
   return (
     <Navbar bg="dark" variant='dark' expand="lg">
       <Container fluid >

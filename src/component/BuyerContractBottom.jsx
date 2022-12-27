@@ -7,13 +7,11 @@ export const BuyerContractBottom = (props) => {
                 <Button variant='outline-primary button100' onClick={async e => {
                     e.preventDefault()
                     try {
-                        const tx = await props?.tokenContract.transfer(props?.address, `${Number(props?.contractAmount) * (10 ** 18)}`)
-                        console.log({ tx })
+                        const tx = await props?.tokenContract.transfer(props.address,props?.contractAmount.toString())
+                       
                         tx.wait()
-                            .then(async e => {
-                                console.log('after wait', e)
+                            .then(async () => {
                                 const tx2 = await props?.escrowContract.confirm_payment()
-                                console.log({ tx2 })
                                 await tx2.wait()
                                 props?.setState(await props?.escrowContract.state())
                                 props.setCallUseEffect(e => !e)

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Row, Col, Alert } from 'react-bootstrap'
-// import { MdOutlineNotificationsNone } from "react-icons/md";
 import { Link, useLocation } from 'react-router-dom';
 import { Notification } from './Notification';
 import { Contract } from 'ethers';
@@ -12,7 +11,7 @@ const { abi } = require("../contracts/escrow.json")
 
 
 export const EscrowContract = (props) => {
-    const history=useHistory()
+    const history = useHistory()
     const location = useLocation()
     const [escrowContract, setEscrowContract] = useState({})
     const [user, setUser] = useState('buyer')
@@ -115,8 +114,8 @@ export const EscrowContract = (props) => {
                     </Col>
                     <Col>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            <Form.Label>Contract Amount [EMT]</Form.Label>
-                            <Form.Control type="number" value={contractAmount} readOnly />
+                            <Form.Label>Contract Amount [in Token]</Form.Label>
+                            <Form.Control type="number" value={`${Number(contractAmount) / 10 ** 18}`} readOnly />
                         </Form.Group>
                     </Col>
                 </Row>
@@ -124,7 +123,7 @@ export const EscrowContract = (props) => {
                 {state === 3 ? <Alert variant='success'>Contract Completed</Alert> : null}
                 {state === 4 ? <Alert variant='danger'>Contract Cancelled and Refund Completed</Alert> : null}
                 {user === 'buyer' ?
-                    <BuyerContractBottom state={state} tokenContract={props?.tokenContract} escrowContract={escrowContract} contractAmount={contractAmount} address={props?.address} setState={setState} setCallUseEffect={props?.setCallUseEffect} />
+                    <BuyerContractBottom state={state} tokenContract={props?.tokenContract} escrowContract={escrowContract} contractAmount={contractAmount} address={location?.state?.address} setState={setState} setCallUseEffect={props?.setCallUseEffect} />
                     : <SellerContractBottom state={state} escrowContract={escrowContract} setState={setState} setCallUseEffect={props?.setCallUseEffect} />
                 }
             </Form>

@@ -34,10 +34,8 @@ export const GenerateContract = (props) => {
                 <Button variant="primary" onClick={async e=>{
                     try{
                     e.preventDefault()
-                    const tx=await props.contract.generateContract(buyeraddress, sellerAddress, `${Number(contractAmount)}`)
-                    console.log({tx})
+                    const tx=await props.contract.generateContract(buyeraddress, sellerAddress, `${Number(contractAmount)*10**18}`)
                     await tx.wait()
-                    console.log('after wait')
                     setContractAmount('')
                     setBuyerAddress('')
                     setSellerAddress('')

@@ -26,9 +26,7 @@ export const Deposit = (props) => {
                         alert('Value cannot be zero or negative')
                     } else {
                         const tx = await props.tokenContract.deposit(localStorage.getItem('address'), `${Number(amount) * (10 ** 18)}`, { value: `${Number(amount) * (10 ** 18)}` })
-                        console.log({ tx })
                         await tx.wait()
-                        console.log('after wait')
                         setAmount(0)
                         props.setCallUseEffect(e => !e)
                     }
