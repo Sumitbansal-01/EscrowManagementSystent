@@ -16,8 +16,8 @@ This project is on Truffle and React
 ## Starting truffle
 
 User mush have truffle instal in their system
-### truffle init
-### truffle migrate
+### `truffle init`
+### `truffle migrate`
 Befor doing the migration user has to configure the network in truffle config
 
 User has to mention the contract address in App.js file in initWeb3 function
