@@ -9,11 +9,11 @@ export const Notification = (props) => {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form.Check type="checkbox" label="Contract Generated" checked={true} />
-                    <Form.Check type="checkbox" label="Payment Confirm" />
-                    <Form.Check type="checkbox" label="Product Shipped" />
-                    <Form.Check type="checkbox" label="Product Delivered" />
-                    <Form.Check type="checkbox" label="Contract Cancel" />
+                    <Form.Check type="checkbox" label="Contract Generated" checked={true} readOnly/>
+                    <Form.Check type="checkbox" label="Payment Confirm" checked={props?.state>0?true:false} readOnly/>
+                    <Form.Check type="checkbox" label="Product Shipped" checked={props?.state>1?true:false} readOnly/>
+                    <Form.Check type="checkbox" label="Product Delivered" checked={props?.state>2?true:false} readOnly/>
+                    {props?.state===4?<Form.Check type="checkbox" label="Contract Cancel" checked={true} readOnly/>:null}
                 </Form>
             </Modal.Body>
             <Modal.Footer>

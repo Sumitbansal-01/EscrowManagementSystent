@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col, Alert } from 'react-bootstrap'
 // import { MdOutlineNotificationsNone } from "react-icons/md";
 import { Link, useLocation } from 'react-router-dom';
 import { Notification } from './Notification';
 import { Contract } from 'ethers';
+import { BuyerContractBottom } from './BuyerContractBottom';
+import { SellerContractBottom } from './SellerContractBottom';
+import { useHistory } from 'react-router-dom';
+
 const { abi } = require("../contracts/escrow.json")
 
 
 export const EscrowContract = (props) => {
+    const history=useHistory()
     const location = useLocation()
     const [escrowContract, setEscrowContract] = useState({})
     const [user, setUser] = useState('buyer')
@@ -17,54 +22,61 @@ export const EscrowContract = (props) => {
     const [arbiter, setArbiter] = useState('')
     const [contractAmount, setContractAmount] = useState('')
     const [status, setStatus] = useState('')
+    const [state, setState] = useState(0)
 
     useEffect(() => {
-        // if (!location?.state?.address) {
-        //     history.push('/')
-        // }
-        const contract = new Contract(location?.state?.address, abi, props?.signer)
-        setEscrowContract(contract)
-        async function callFn() {
-            const buyer = await contract.buyer()
-            const seller = await contract.seller()
-            const contractStatus = await contract.state()
-            setBuyer(buyer)
-            setSeller(seller)
-            setArbiter(await contract.arbiter())
-            setContractAmount(await contract.contractAmount())
-            switch (contractStatus) {
-                case 0:
-                    setStatus('Contract Generated')
-                    break
-                case 1:
-                    setStatus('Payment Confirmed')
-                    break
-                case 2:
-                    setStatus('Product Shipped')
-                    break
-                case 3:
-                    setStatus('Product Delivered')
-                    break
-                default:
-                    setStatus('Contract Cancel')
+        if (!props?.tokenContract.address) {
+            history.push('/')
+        } else {
+            const contract = new Contract(location?.state?.address, abi, props?.signer)
+            setEscrowContract(contract)
+            async function callFn() {
+                const buyer = await contract.buyer()
+                const seller = await contract.seller()
+                const contractStatus = await contract.state()
+                setState(contractStatus)
+                setBuyer(buyer)
+                setSeller(seller)
+                setArbiter(await contract.arbiter())
+                setContractAmount(await contract.contractAmount())
+
+                if (buyer === localStorage.getItem('address')) {
+                    setUser('buyer')
+                } else if (seller === localStorage.getItem('address')) {
+                    setUser('seller')
+                }
             }
-            if (buyer === localStorage.getItem('address')) {
-                setUser('buyer')
-            } else if (seller === localStorage.getItem('address')) {
-                setUser('seller')
-            }
+            callFn()
         }
-        callFn()
-    }, [props, location])
+    }, [props, location, history])
+
+    useEffect(() => {
+        switch (state) {
+            case 0:
+                setStatus('Contract Generated')
+                break
+            case 1:
+                setStatus('Payment Confirmed')
+                break
+            case 2:
+                setStatus('Product Shipped')
+                break
+            case 3:
+                setStatus('Product Delivered')
+                break
+            default:
+                setStatus('Contract Cancel')
+        }
+    }, [state])
     return (
-        <div className='container' style={{ backgroundColor: 'white', boxShadow: '5px 5px 5px grey', width: '70%', height: '70%', position: 'absolute', top: '15%', left: '15%', padding: '2%' }}>
+        <div className='container' style={{ backgroundColor: 'white', boxShadow: '5px 5px 5px grey', width: '70%', height: '65%', position: 'absolute', top: '15%', left: '15%', padding: '2%' }}>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Link to='#' onClick={e => {
                     e.preventDefault()
                     setShowNotification(true)
                 }}>Track Contract</Link>
             </div>
-            {showNotifcation ? <Notification show={showNotifcation} handleClose={() => { setShowNotification(false) }} /> : null}
+            {showNotifcation ? <Notification show={showNotifcation} handleClose={() => { setShowNotification(false) }} state={state} /> : null}
             <Form className='container'>
                 <Row>
                     <Col>
@@ -109,59 +121,13 @@ export const EscrowContract = (props) => {
                     </Col>
                 </Row>
                 <br />
+                {state === 3 ? <Alert variant='success'>Contract Completed</Alert> : null}
+                {state === 4 ? <Alert variant='danger'>Contract Cancelled and Refund Completed</Alert> : null}
                 {user === 'buyer' ?
-                    <>
-                        <Row>
-                            <Button variant='outline-primary' onClick={async e => {
-                                e.preventDefault()
-                                try {
-                                    const tx = await props?.tokenContract.transfer(seller, Number(contractAmount) * (10 ** 18))
-                                    await tx.wait()
-                                    await escrowContract.confirm_payment()
-                                } catch (err) {
-                                    console.error(err)
-                                }
-                            }}>Confirm Payment</Button>
-                        </Row>
-                        <br />
-                        <Row>
-                            <Button variant='outline-primary' onClick={async e => {
-                                e.preventDefault()
-                                try {
-                                    const tx = await props?.escrowContract?.confirm_Delivery()
-                                    await tx.wait()
-                                } catch (err) {
-                                    console.error(err)
-                                }
-                            }}>Confirm Delivery</Button>
-                        </Row>
-                    </> :
-                    <>
-                        <Row>
-                            <Button variant='outline-primary' onClick={async e => {
-                                e.preventDefault()
-                                try {
-                                    const tx = await props?.escrowContract.confirm_shipped()
-                                    await tx.wait()
-                                } catch (err) {
-                                    console.error(err)
-                                }
-                            }}>Product Shipped</Button>
-                        </Row>
-                        <br />
-                        <Row>
-                            <Button variant='outline-primary' onClick={async e => {
-                                e.preventDefault()
-                                try {
-                                    const tx = await props?.escrowContract.ReturnPayment()
-                                    await tx.wait()
-                                } catch (err) {
-                                    console.error(err)
-                                }
-                            }}>Return Payment</Button>
-                        </Row>
-                    </>}
+                    <BuyerContractBottom state={state} tokenContract={props?.tokenContract} escrowContract={escrowContract} contractAmount={contractAmount} address={props?.address} setState={setState} setCallUseEffect={props?.setCallUseEffect} />
+                    : <SellerContractBottom state={state} escrowContract={escrowContract} setState={setState} setCallUseEffect={props?.setCallUseEffect} />
+                }
             </Form>
-        </div>
+        </div >
     )
 }

@@ -1,8 +1,8 @@
-import React , {useState} from 'react'
+import React, { useState } from 'react'
 import { Modal, Button, Form } from "react-bootstrap"
 
 export const Deposit = (props) => {
-    const [amount,setAmount]=useState(0)
+    const [amount, setAmount] = useState(0)
     return (
         <Modal show={props?.show} onHide={props?.handleClose} centered size='sm'>
             <Modal.Header closeButton>
@@ -20,14 +20,18 @@ export const Deposit = (props) => {
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="primary" onClick={async e=>{
+                <Button variant="primary" onClick={async e => {
                     e.preventDefault()
-                    const tx=await props.tokenContract.deposit(localStorage.getItem('address'),`${Number(amount)*(10**18)}`,{value:`${Number(amount)*(10**18)}`})
-                    console.log({tx})
-                    await tx.wait()
-                    console.log('after wait')
-                    setAmount(0)
-                    props.setCallUseEffect(e=>!e)
+                    if (amount <= 0) {
+                        alert('Value cannot be zero or negative')
+                    } else {
+                        const tx = await props.tokenContract.deposit(localStorage.getItem('address'), `${Number(amount) * (10 ** 18)}`, { value: `${Number(amount) * (10 ** 18)}` })
+                        console.log({ tx })
+                        await tx.wait()
+                        console.log('after wait')
+                        setAmount(0)
+                        props.setCallUseEffect(e => !e)
+                    }
                 }}>
                     Add
                 </Button>
