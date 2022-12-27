@@ -30,7 +30,7 @@ function App() {
         const address = await signer.getAddress()
         localStorage.setItem('address', address)
         setAddress(address)
-        const contract = new Contract('0x678194d5EBe9ff3B60474cA84E7Bef5bBf5F5F4b', abi, signer)
+        const contract = new Contract('0x6CB986118c646c0D51303b82459f8Ae1086b1De0', abi, signer)
         setContract(contract)
         setSigner(signer)
         resolve({ signer, chainId, address, contract })
