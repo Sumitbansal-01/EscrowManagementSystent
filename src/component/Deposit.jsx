@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Modal, Button, Form } from "react-bootstrap"
+import { Modal, Button, Form, Spinner } from "react-bootstrap"
 
 export const Deposit = (props) => {
     const [amount, setAmount] = useState(0)
+    const [showLoader, setShowLoader] = useState(false)
     return (
         <Modal show={props?.show} onHide={props?.handleClose} centered size='sm'>
             <Modal.Header closeButton>
@@ -24,14 +25,24 @@ export const Deposit = (props) => {
                     e.preventDefault()
                     if (amount <= 0) {
                         alert('Value cannot be zero or negative')
+                        
                     } else {
-                        const tx = await props.tokenContract.deposit(localStorage.getItem('address'), `${Number(amount) * (10 ** 18)}`, { value: `${Number(amount) * (10 ** 18)}` })
-                        await tx.wait()
-                        setAmount(0)
-                        props.setCallUseEffect(e => !e)
+                        try {
+                            setShowLoader(true)
+                            const tx = await props.tokenContract.deposit(localStorage.getItem('address'), `${Number(amount) * (10 ** 18)}`, { value: `${Number(amount) * (10 ** 18)}` })
+                            await tx.wait()
+                            setAmount(0)
+                            props.setCallUseEffect(e => !e)
+                        } catch (err) {
+                            console.log(err)
+                        }finally{
+                            props?.handleClose()
+                        }
                     }
                 }}>
-                    Add
+                    {!showLoader ? "Add" : <Spinner animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>}
                 </Button>
             </Modal.Footer>
         </Modal>
