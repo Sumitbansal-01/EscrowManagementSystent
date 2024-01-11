@@ -1,14 +1,17 @@
-### This is EscrowFundManagement created by Sumit Bansal
+### This is Escrow Management System created by Sumit Bansal
 
 In this project people can create their escrow account. The payment method which will use are ERC20 token name "EFMT". All the history of the contract is saved in a main contract so people can create multiple contract and can manage them at the same time. In this project their are 3 contract
 
-###  EscrowFundManagement
+### Escrow Management System
+
 This is the main contract which initiliaze the token contract and escrow contract. This contract store all the previous escrow contract in which the user is participate
 
 ### EscrowFundManagementToken
+
 This is an ERC20 token contract and this contract initialize by the main contract. This token of this is of 18 decimals and the symbol is EFMT. This contract work on mint burn phenomena.This contract is payable for minting user have to pay ethers or value to the contract which are equal to the number of token that will mint. If anyone want to burn the contract then they should called "withdrawal" method to burn the token and get the equal amount of ethers
 
 ### escrow
+
 As the name suggest this is an escrow which user created with the help of main contract
 
 This project is on Truffle and React
@@ -16,12 +19,14 @@ This project is on Truffle and React
 ## Starting truffle
 
 User mush have truffle instal in their system
+
 ### `truffle init`
+
 ### `truffle migrate`
+
 Befor doing the migration user has to configure the network in truffle config
 
 User has to mention the contract address in App.js file in initWeb3 function
-
 
 ## Getting Started with Create React App
 
@@ -33,23 +38,23 @@ In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
+The page will reload when you make changes.
 You may also see any lint errors in the console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
+Launches the test runner in the interactive watch mode.
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
+Builds the app for production to the `build` folder.
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
+The build is minified and the filenames include the hashes.
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
