@@ -4,7 +4,7 @@ import { Footer } from './component/Footer';
 import { LoginPage } from './component/LoginPage';
 import { ContractList } from './component/ContractList';
 import { EscrowContract } from './component/Contract'
-import './App.css';
+import NotFound from './component/NotFound';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Web3Modal from "web3modal"
 import { ethers, Contract } from "ethers"
@@ -26,6 +26,16 @@ function App() {
         const instance = await web3Modal.connect();
         const provider = new ethers.providers.Web3Provider(instance);
         const { chainId } = await provider.getNetwork()
+
+        // Check network and prompt user to switch
+        console.log({ chainId })
+        if (chainId !== 5) {
+          alert("Please use Goerli test network")
+          throw new Error("Please use Goerli test network")
+        }
+
+        // Continue with your DApp logic
+
         const signer = provider.getSigner();
         const address = await signer.getAddress()
         localStorage.setItem('address', address)
@@ -51,10 +61,10 @@ function App() {
   }, [callUseEffect, tokenContract, address])
 
   return (
-    <div className="App">
+    <div className="App" style={{ display: 'flex', flexDirection: 'column', minHeight: "100vh" }}>
       <BrowserRouter>
-        <Header tokenContract={tokenContract} address={address} balance={balance} setCallUseEffect={setCallUseEffect} />
-        <div style={{ minHeight: '82vh' }}>
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <Header tokenContract={tokenContract} address={address} balance={balance} setCallUseEffect={setCallUseEffect} />
           <Switch >
             <Route exact path="/">
               <LoginPage connect={initWeb3} setTokenContract={setTokenContract} />
@@ -65,6 +75,7 @@ function App() {
             <Route exact path="/contract">
               <EscrowContract signer={signer} tokenContract={tokenContract} setCallUseEffect={setCallUseEffect} />
             </Route>
+            <NotFound />
           </Switch>
         </div>
         <Footer />
